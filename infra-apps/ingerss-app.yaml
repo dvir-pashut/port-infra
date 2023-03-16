@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx
+  namespace: argo
+spec:
+  project: default
+  source:
+    chart: ingress-nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: 4.4.2
+    helm:
+      parameters:
+        - name: "controller.service.loadBalancerIP"
+          value: "34.29.244.213"
+      releaseName: ingress-nginx
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: application
+
+  syncPolicy:
+     automated:
+       prune: true
+       selfHeal: true
+     syncOptions:
+      - CreateNamespace=true
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx-argo
+  namespace: argo
+spec:
+  project: default
+  source:
+    chart: ingress-nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: 4.4.2
+    helm:
+      parameters:
+        - name: "controller.service.loadBalancerIP"
+          value: "34.172.179.105"
+        - name: "controller.ingressClassResource.name"
+          value: "argo"
+      releaseName: ingress-nginx-argo
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: argo
+
+  syncPolicy:
+     automated:
+       prune: true
+       selfHeal: true
+     syncOptions:
+      - CreateNamespace=true

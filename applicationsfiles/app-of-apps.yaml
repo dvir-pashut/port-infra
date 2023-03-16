@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+  namespace: argo
+spec:
+  destination:
+    name: ''
+    namespace: argo
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: infra-apps
+    repoURL: 'git@github.com:dvir-pashut/port-infra.git'
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+     automated:
+       prune: true
+       #selfHeal: true ### when debug mode is on this better stay of
+     syncOptions:
+      - CreateNamespace=true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dvireview
+  namespace: argo
+spec:
+  destination:
+    name: ''
+    namespace: application
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: dvireview
+    repoURL: 'git@github.com:dvir-pashut/port-charts.git'
+    targetRevision: main
+  project: default
+  syncPolicy:
+     automated:
+       prune: true
+       selfHeal: true
+     syncOptions:
+      - CreateNamespace=true
