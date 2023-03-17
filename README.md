@@ -1,4 +1,4 @@
-# port-infra
+# portfolio-manifist
 this repo contains the infra apps for the project <br>
 
-the applications file for gitops the terraform files
+the argocd applications files for gitops. the terraform files and modules
